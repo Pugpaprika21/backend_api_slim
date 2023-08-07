@@ -31,3 +31,8 @@ $capsule = new Capsule;
 $capsule->addConnection($database['connection']['eloquent']);
 $capsule->bootEloquent();
 $capsule->setAsGlobal();
+
+
+/* API */
+
+const TOKEN = '79f5b6d5e8c3280e5db1d5bda60c46232b2c858bf3dd060b0cc065a83f394b27';
