@@ -1,0 +1,39 @@
+{
+    "require": {
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.6",
+        "illuminate/database": "^10.13",
+        "slim/twig-view": "^3.3",
+        "tuupola/cors-middleware": "^1.4"
+    },
+    "autoload": {
+        "files": [
+            "app/helpers/app.php",
+            "app/helpers/mysqli.php",
+            "src/function/@@helpers.php",
+            "src/classes/buliders/DBConfig.php",
+            "src/classes/buliders/Query.php",
+            "src/classes/buliders/Bulider.php",
+            "src/classes/Http.php",
+            "src/classes/API.php",
+            "src/classes/Str.php"
+        ],
+        "psr-4": {
+            "App\\": "app/",
+            "App\\Controllers\\": "app/controllers/",
+            "App\\Controllers\\Base\\": "app/controllers/base/",
+            "App\\Foundation\\": "app/foundation/",
+            "App\\Foundation\\Database\\": "app/foundation/database/",
+            "App\\Models\\": "app/models/"
+        }
+    },
+    "_comment": "The following files are temporarily excluded from autoload:",
+    "_comment_files": [
+        "src/function/@@mysqli_db.php"
+    ],
+    "config": {
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
+    }
+}

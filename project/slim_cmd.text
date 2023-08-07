@@ -1,0 +1,28 @@
+php -S localhost:8080 -t public router/index.php
+
+composer require illuminate/database
+composer remove illuminate/database "~5.1"
+composer update
+
+
+route param --
+
+$app->get('/', [HomeController::class, 'indexPage'])->setName('index-page');
+$app->get('/page/user/[{id}/{action}]', [HomeController::class, 'formHome'])->setName('home-page');
+
+
+####
+
+$query = new Query();
+
+$app->group('/api', function (RouteCollectorProxy $group) {
+    $group->get('/users', function (Request $request, Response $response, array $args) {
+        global $query;
+        $users = $query->table('user_tb')->get();
+        return response_json($response, ['data' => $users]);
+    });
+    
+    $group->get('/reset-password', function (Request $request, Response $response, array $args) {
+        return response_json($response, ['api_message' => '/reset-password']);
+    });
+});
