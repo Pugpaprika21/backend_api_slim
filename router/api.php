@@ -25,7 +25,7 @@ $app->add(function (Request $request, RequestHandler $handler): Response {
 });
 
 $app->group('/api', function (RouteCollectorProxy $group): void {
-    $group->get('/users/[{token}]', function (Request $request, Response $response, array $args): Response {
+    $group->get('/users/{token}', function (Request $request, Response $response, array $args): Response {
         if (!empty($args['token'])) {
             if ($args['token'] == TOKEN) {
                 $users = db_select("select * from user_tb");
