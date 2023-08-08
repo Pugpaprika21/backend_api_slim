@@ -6,6 +6,8 @@
  * @override <mysqli>
  */
 
+use App\Foundation\Database\Query;
+
 if (!function_exists('db_connect')) {
 
     /**
@@ -156,5 +158,17 @@ if (!function_exists('db_delete')) {
         mysqli_close($conn);
 
         return ($query_) ? true : false;
+    }
+}
+
+if (!function_exists('get_pdo')) {
+
+    /**
+     * @param string $dirver
+     * @return PDO
+     */
+    function get_pdo(string $dirver = 'mysql')
+    {
+        return (new Query($dirver))->getPDO();
     }
 }

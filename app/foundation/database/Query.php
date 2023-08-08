@@ -207,4 +207,9 @@ class Query extends QueryConnection
         }
         return self::excuteRawQuery($conn, $sqlStmt);
     }
+
+    public function getPDO(): PDO
+    {
+        return self::$db;
+    }
 }
