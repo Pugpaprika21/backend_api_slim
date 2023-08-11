@@ -3,6 +3,7 @@
 namespace App\Foundation\Database;
 
 use PDO;
+use PDOException;
 
 class Query extends QueryConnection
 {
@@ -208,8 +209,12 @@ class Query extends QueryConnection
         return self::excuteRawQuery($conn, $sqlStmt);
     }
 
-    public function getPDO(): PDO
+    public function usePDO()
     {
-        return self::$db;
+        $pdo = self::$db;
+        if ($pdo instanceof PDO) {
+            return $pdo;
+        }
+        throw_if(true, "PDOException", 'PDO Error');
     }
 }

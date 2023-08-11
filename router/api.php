@@ -25,6 +25,17 @@ $app->add(function (Request $request, RequestHandler $handler): Response {
 });
 
 $app->group('/api', function (RouteCollectorProxy $group): void {
+    $group->get('/index/[{id}]', function (Request $request, Response $response, array $args): Response {
+        global $pdo;
+
+        $userId = $args['id'];
+
+        $stmt = $pdo->prepare("select * from user_tb where user_id = ?");
+        $stmt->execute([$userId]);
+        $user = $stmt->fetch();
+        return response_json($response, array('message' => $user));
+    });
+
     $group->get('/users/{token}', function (Request $request, Response $response, array $args): Response {
         if (!empty($args['token'])) {
             if ($args['token'] == TOKEN) {

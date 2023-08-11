@@ -161,14 +161,14 @@ if (!function_exists('db_delete')) {
     }
 }
 
-if (!function_exists('get_pdo')) {
+if (!function_exists('call_pdo')) {
 
     /**
      * @param string $dirver
      * @return PDO
      */
-    function get_pdo(string $dirver = 'mysql')
+    function call_pdo(string $dirver = 'mysql'): PDO
     {
-        return (new Query($dirver))->getPDO();
+        return (new Query($dirver))->usePDO();
     }
 }
