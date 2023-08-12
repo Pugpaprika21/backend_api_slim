@@ -43,7 +43,9 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
     });
 
     $group->post('/createUser', function (Request $request, Response $response, array $args): Response {
+        global $query;
         $body = $request->getParsedBody();
+
         if (!empty($body['token'])) {
             if ($body['token'] == TOKEN) {
 
@@ -57,10 +59,24 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
                     $fileData = ['name' => str($file['name']), 'tmp_name' => str($file['tmp_name'])];
                     $fileName = file_uploaded(__DIR__ . '../../upload/image/', $fileData);
                 }
-                #
-                return json($response, array('message' => $fileName));
+
+                $password = rend_string();
+
+                $query->table('users')->insert([
+                    'user_name' => $username,
+                    'user_pass' => $password,
+                    'user_phone' => '',
+                    'user_email' => "{$username}_@gmail.com",
+                    'user_token' => U_SYS_TOKEN,
+                    'user_profile' => $fileName,
+                    'user_status' => 'Y',
+                    'create_date_at' => CREATE_DATE_AT,
+                    'create_time_at' => CREATE_TIME_AT
+                ]);
+
+                return json($response, array('message' => 'create user success...', 'status' => true));
             }
-            return json($response, array('message' => 'token does not match'), 500);
+            return json($response, array('message' => 'token does not match', 'status' => false), 500);
         }
         return json($response, array('message' => 'token not found'), 500);
     });
