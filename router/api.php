@@ -29,13 +29,36 @@ $query = new Query();
 
 $app->group('/api', function (RouteCollectorProxy $group): void {
     $group->get('/users/{token}', function (Request $request, Response $response, array $args): Response {
-        global $query;
+        global $pdo;
 
         if (!empty($args['token'])) {
             if ($args['token'] == TOKEN) {
-                $users = $query->excute("select * from users");
+                $userList = [];
+                $users = $pdo->query("SELECT * FROM users ORDER BY user_id DESC")->fetchAll();
                 $rows = count($users);
-                return json($response, array('data' => $users, 'rows' => $rows));
+                if ($rows > 0) {
+                    foreach ($users as $user) {
+                        $imageURL = '';
+                        if (!empty($user['user_profile'])) {
+                            $imageURL = image_url(__DIR__ . "/../upload/image/{$user['user_profile']}");
+                        }
+
+                        $userList[] = [
+                            'image' => $user['user_profile'],
+                            'user_name' => $user['user_name'],
+                            'user_pass' => $user['user_pass'],
+                            'user_phone' => $user['user_phone'],
+                            'user_email' => $user['user_email'],
+                            'user_token' => $user['user_token'],
+                            'user_profile' => $imageURL,
+                            'user_status' => $user['user_status'],
+                            'create_date_at' => $user['create_date_at'],
+                            'create_time_at' => $user['create_time_at']
+                        ];
+                    }
+                    return json($response, array('data' => $userList, 'rows' => $rows));
+                }
+                return json($response, array('data' => $userList, 'rows' => 0));
             }
             return json($response, array('message' => 'token does not match'), 500);
         }

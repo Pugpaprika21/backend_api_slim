@@ -147,3 +147,18 @@ if (!function_exists('json')) {
             ->withStatus($status);
     }
 }
+
+if (!function_exists('image_url')) {
+
+    /**
+     * @param string $imagePath
+     * @return string
+     */
+    function image_url(string $imagePath)
+    {
+        $fileExtension = pathinfo($imagePath, PATHINFO_EXTENSION);
+        $imageContents = file_get_contents($imagePath);
+        $imageBase64 = base64_encode($imageContents);
+        return "data:image/{$fileExtension};base64,{$imageBase64}";
+    }
+}
