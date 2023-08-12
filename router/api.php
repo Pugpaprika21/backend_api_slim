@@ -1,5 +1,6 @@
 <?php
 
+use App\Foundation\Database\Query;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -24,11 +25,15 @@ $app->add(function (Request $request, RequestHandler $handler): Response {
         ->withHeader('Access-Control-Allow-Methods', '*');
 });
 
+$query = new Query();
+
 $app->group('/api', function (RouteCollectorProxy $group): void {
     $group->get('/users/{token}', function (Request $request, Response $response, array $args): Response {
+        global $query;
+
         if (!empty($args['token'])) {
             if ($args['token'] == TOKEN) {
-                $users = db_select("select * from users");
+                $users = $query->excute("select * from users");
                 $rows = count($users);
                 return json($response, array('data' => $users, 'rows' => $rows));
             }
