@@ -29,12 +29,12 @@ $query = new Query();
 
 $app->group('/api', function (RouteCollectorProxy $group): void {
     $group->get('/users/{token}', function (Request $request, Response $response, array $args): Response {
-        global $pdo;
+        global $query;
 
         if (!empty($args['token'])) {
             if ($args['token'] == TOKEN) {
                 $userList = [];
-                $users = $pdo->query("SELECT * FROM users ORDER BY user_id DESC")->fetchAll();
+                $users = $query->table('users')->orderBy('user_id', 'desc')->get();
                 $rows = count($users);
                 if ($rows > 0) {
                     foreach ($users as $user) {
