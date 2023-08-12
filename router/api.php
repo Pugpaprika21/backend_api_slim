@@ -89,7 +89,7 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
                     'user_name' => $username,
                     'user_pass' => $password,
                     'user_phone' => '',
-                    'user_email' => "{$username}_@gmail.com",
+                    'user_email' => $userEmail,
                     'user_token' => U_SYS_TOKEN,
                     'user_profile' => $fileName,
                     'user_status' => 'Y',
