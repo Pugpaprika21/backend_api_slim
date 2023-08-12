@@ -25,27 +25,39 @@ $app->add(function (Request $request, RequestHandler $handler): Response {
 });
 
 $app->group('/api', function (RouteCollectorProxy $group): void {
-    $group->get('/index/[{id}]', function (Request $request, Response $response, array $args): Response {
-        global $pdo;
-
-        $userId = $args['id'];
-
-        $stmt = $pdo->prepare("select * from user_tb where user_id = ?");
-        $stmt->execute([$userId]);
-        $user = $stmt->fetch();
-        return response_json($response, array('message' => $user));
-    });
-
     $group->get('/users/{token}', function (Request $request, Response $response, array $args): Response {
         if (!empty($args['token'])) {
             if ($args['token'] == TOKEN) {
-                $users = db_select("select * from user_tb");
+                $users = db_select("select * from users");
                 $rows = count($users);
-                return response_json($response, array('data' => $users, 'rows' => $rows));
+                return json($response, array('data' => $users, 'rows' => $rows));
             }
-            return response_json($response, array('message' => 'token does not match'), 500);
+            return json($response, array('message' => 'token does not match'), 500);
         }
-        return response_json($response, array('message' => 'token not found'), 500);
+        return json($response, array('message' => 'token not found'), 500);
+    });
+
+    $group->post('/createUser', function (Request $request, Response $response, array $args): Response {
+        $body = $request->getParsedBody();
+        if (!empty($body['token'])) {
+            if ($body['token'] == TOKEN) {
+
+                $fileName = '';
+                $username = str($body['username']);
+                $userEmail = str($body['email']);
+                $rememberMe = str($body['rememberMe']);
+                $file = !empty($_FILES['profileFile']) ? $_FILES['profileFile'] : [];
+
+                if (!empty($file['name'])) {
+                    $fileData = ['name' => str($file['name']), 'tmp_name' => str($file['tmp_name'])];
+                    $fileName = file_uploaded(__DIR__ . '../../upload/image/', $fileData);
+                }
+
+                return json($response, array('message' => $fileName));
+            }
+            return json($response, array('message' => 'token does not match'), 500);
+        }
+        return json($response, array('message' => 'token not found'), 500);
     });
 });
 

@@ -131,7 +131,7 @@ if (!function_exists('redirect')) {
     }
 }
 
-if (!function_exists('response_json')) {
+if (!function_exists('json')) {
 
     /**
      * @param Response $response
@@ -139,7 +139,7 @@ if (!function_exists('response_json')) {
      * @param integer $status
      * @return Response
      */
-    function response_json(Response $response, array $data = [], int $status = 201): Response
+    function json(Response $response, array $data = [], int $status = 201): Response
     {
         $response->getBody()->write(json_encode($data));
         return $response

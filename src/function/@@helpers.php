@@ -286,10 +286,10 @@ if (!function_exists('rend_string')) {
     }
 }
 
-if (!function_exists('file_upload')) {
+if (!function_exists('file_uploaded')) {
 
     /**
-     * file_upload('../../upload/image/', [
+     * file_uploaded('../../upload/image/', [
      *      'name' => $file['user_profile']['name'],
      *      'tmp_name' => $file['user_profile']['tmp_name']
      * ]);
@@ -300,14 +300,9 @@ if (!function_exists('file_upload')) {
      * @param array $file
      * @return string|void 
      */
-    function file_upload($path_upload, $file)
+    function file_uploaded($path_upload, $file)
     {
-        $path = __DIR__ . $path_upload;
-        if (!file_exists($path)) {
-            http_response_code(404);
-            echo_r(['path_upload' => $path_upload, 'file' => $file]);
-        }
-
+        $path = $path_upload;
         $imageFileType = pathinfo($file['name'], PATHINFO_EXTENSION);
         $typeFile = array_merge(['jpg', 'jpeg', 'png'], ['JPG', 'JPEG', 'PNG']);
         if (!in_array($imageFileType, $typeFile)) {
@@ -322,7 +317,7 @@ if (!function_exists('file_upload')) {
         chmod($file_target, 0777);
 
         $d = now('d');
-        write_log($file_target,  __DIR__ . "/../../logs/process/upload_files_{$d}.txt");
+        //write_log($file_target,  __DIR__ . "/../../logs/process/upload_files_{$d}.txt");
         return $file_name;
     }
 }

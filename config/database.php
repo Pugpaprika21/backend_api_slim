@@ -13,7 +13,7 @@ return [
             'host' => 'localhost',
             'user' => 'root',
             'pass' => '',
-            'name' => 'joblog_db',
+            'name' => 'rest_api_vue_slim',
             'port' => '3306',
             'char_set' => 'utf8',
         ],
