@@ -167,9 +167,10 @@ class Query extends QueryConnection
     }
 
     /**
+     * @param boolean $fetchWithoutArray
      * @return array
      */
-    public static function get()
+    public static function get(bool $fetchWithoutArray = true)
     {
         $set = self::$setQuery;
         $conn = $set['db'];
@@ -183,10 +184,11 @@ class Query extends QueryConnection
 
         write_log($sqlSelect, $set['save_log'] . "query_{$set['date']}.txt");
 
-        $resultQuery = $conn->query($sqlSelect)->fetchAll();
+        $items = $conn->query($sqlSelect)->fetchAll();
 
         unset($set, $conn);
-        return $resultQuery;
+        if ($fetchWithoutArray) return $items;
+        return !empty($items[0]) ? $items[0] : $items;
     }
 
     /**
