@@ -1,8 +1,8 @@
 <?php
 
-use App\Foundation\Database\Query;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
+use App\Foundation\Database\Query;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -34,7 +34,7 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
         if (!empty($args['token'])) {
             if ($args['token'] == TOKEN) {
                 $userList = [];
-                $users = $query->table('users')->orderBy('user_id', 'desc')->get();
+                $users = $query->table('users')->select('user_id', 'user_name', 'user_email', 'user_status', 'user_profile')->orderBy('user_id', 'desc')->get();
                 $rows = count($users);
                 if ($rows > 0) {
                     foreach ($users as $user) {
@@ -46,14 +46,9 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
                         $userList[] = [
                             'user_id' => $user['user_id'],
                             'user_name' => $user['user_name'],
-                            'user_pass' => $user['user_pass'],
-                            'user_phone' => $user['user_phone'],
                             'user_email' => $user['user_email'],
-                            'user_token' => $user['user_token'],
                             'user_profile' => $imageURL,
-                            'user_status' => $user['user_status'],
-                            'create_date_at' => $user['create_date_at'],
-                            'create_time_at' => $user['create_time_at']
+                            'user_status' => $user['user_status']
                         ];
                     }
                     return json($response, ['data' => $userList, 'rows' => $rows]);
