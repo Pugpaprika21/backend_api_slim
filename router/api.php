@@ -34,7 +34,12 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
         if (!empty($args['token'])) {
             if ($args['token'] == TOKEN) {
                 $userList = [];
-                $users = $query->table('users')->select('user_id', 'user_name', 'user_email', 'user_status', 'user_profile')->orderBy('user_id', 'desc')->get();
+                $users = $query->table('users')
+                    ->select('user_id', 'user_name', 'user_email', 'user_status', 'user_profile')
+                    ->where('user_profile', '!=', '')
+                    ->orderBy('user_id', 'desc')
+                    ->get();
+
                 $rows = count($users);
                 if ($rows > 0) {
                     foreach ($users as $user) {
