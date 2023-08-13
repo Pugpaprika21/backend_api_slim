@@ -56,13 +56,13 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
                             'create_time_at' => $user['create_time_at']
                         ];
                     }
-                    return json($response, array('data' => $userList, 'rows' => $rows));
+                    return json($response, ['data' => $userList, 'rows' => $rows]);
                 }
-                return json($response, array('data' => $userList, 'rows' => 0));
+                return json($response, ['data' => $userList, 'rows' => 0]);
             }
-            return json($response, array('message' => 'token does not match'), 500);
+            return json($response, ['message' => 'token does not match'], 500);
         }
-        return json($response, array('message' => 'token not found'), 500);
+        return json($response, ['message' => 'token not found'], 500);
     });
 
     $group->post('/createUser', function (Request $request, Response $response, array $args): Response {
@@ -97,11 +97,11 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
                     'create_time_at' => CREATE_TIME_AT
                 ]);
 
-                return json($response, array('message' => 'create user success...', 'status' => true));
+                return json($response, ['message' => 'create user success...', 'status' => true]);
             }
-            return json($response, array('message' => 'token does not match', 'status' => false), 500);
+            return json($response, ['message' => 'token does not match', 'status' => false], 500);
         }
-        return json($response, array('message' => 'token not found'), 500);
+        return json($response, ['message' => 'token not found'], 500);
     });
 
     $group->delete('/deleteUser/{id}', function (Request $request, Response $response, array $args): Response {
