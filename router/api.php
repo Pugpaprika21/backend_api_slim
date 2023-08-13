@@ -44,6 +44,7 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
                         }
 
                         $userList[] = [
+                            'user_id' => $user['user_id'],
                             'user_name' => $user['user_name'],
                             'user_pass' => $user['user_pass'],
                             'user_phone' => $user['user_phone'],
@@ -100,6 +101,10 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
             }
             return json($response, array('message' => 'token does not match', 'status' => false), 500);
         }
+        return json($response, array('message' => 'token not found'), 500);
+    });
+
+    $group->delete('/createUser/{id}', function (Request $request, Response $response, array $args): Response {
         return json($response, array('message' => 'token not found'), 500);
     });
 });
