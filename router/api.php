@@ -44,7 +44,6 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
                         }
 
                         $userList[] = [
-                            'image' => $user['user_profile'],
                             'user_name' => $user['user_name'],
                             'user_pass' => $user['user_pass'],
                             'user_phone' => $user['user_phone'],
