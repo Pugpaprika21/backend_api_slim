@@ -104,8 +104,32 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
         return json($response, array('message' => 'token not found'), 500);
     });
 
-    $group->delete('/createUser/{id}', function (Request $request, Response $response, array $args): Response {
-        return json($response, array('message' => 'token not found'), 500);
+    $group->delete('/deleteUser/{id}', function (Request $request, Response $response, array $args): Response {
+        global $query;
+        $param = $request->getQueryParams();
+
+        if (!empty($param['token'])) {
+            if ($param['token'] == TOKEN) {
+                $userId = str($args['id']);
+
+                $user = $query->excute("select user_id, user_profile from users where user_id = '{$userId}'", false);
+
+                if (!empty($user['user_profile'])) {
+                    unlink(__DIR__ . "../../upload/image/{$user['user_profile']}");
+                }
+
+                $deleteUser = $query->table('users')->where('user_id', '=', $user['user_id'])->delete();
+
+                if ($deleteUser) {
+                    return json($response, ['message' => 'delete user success...', 'status' => true]);
+                }
+                return json($response, ['message' => 'can`t delete user', 'status' => false], 500);
+            }
+
+            return json($response, ['message' => 'token does not match', 'status' => false], 500);
+        }
+
+        return json($response, ['message' => 'token not found'], 500);
     });
 });
 
