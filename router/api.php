@@ -145,9 +145,48 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
         return json($response, ['message' => 'token not found'], 500);
     });
 
-    $group->put('/updateUser/{id}', function (Request $request, Response $response, array $args): Response {
+    $group->post('/updateUser', function (Request $request, Response $response, array $args): Response {
+        global $query;
+        $body = $request->getParsedBody();
 
-        $bodys = array($request->getQueryParams(), $args, $_FILES, $_REQUEST);
+        if (!empty($body['token'])) {
+            if ($body['token'] == TOKEN) {
+                $fileName = '';
+                $userId = str($body['userId']);
+                $username = str($body['username']);
+                $userEmail = str($body['userEmail']);
+                $file = !empty($_FILES['userProfile']) ? $_FILES['userProfile'] : [];
+
+                $user = $query->table('users')
+                    ->select('user_id', 'user_profile')
+                    ->where('user_id', '=', $userId)
+                    ->get(false);
+
+                if (!empty($user['user_profile'])) {
+                    unlink(__DIR__ . "../../upload/image/{$user['user_profile']}");
+                }
+
+                if (!empty($file['name'])) {
+                    $fileData = ['name' => str($file['name']), 'tmp_name' => str($file['tmp_name'])];
+                    $fileName = file_uploaded(__DIR__ . '../../upload/image/', $fileData);
+                }
+
+                $query->table('users')->fields([
+                    'user_name' => $username,
+                    'user_email' => $userEmail,
+                    'user_profile' => $fileName
+                ])
+                ->where('user_id', '=', $userId)->update();
+
+                return json($response, ['status' => true]);
+            }
+
+            return json($response, ['message' => 'token does not match', 'status' => false], 500);
+        }
+        return json($response, ['message' => 'token not found'], 500);
+
+
+        $bodys = array($body, $_FILES);
 
         return json($response, ['data' => $bodys, 'status' => true]);
     });
@@ -160,7 +199,10 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
             if ($param['token'] == TOKEN) {
                 $userId = str($args['id']);
 
-                $user = $query->excute("select user_id, user_profile from users where user_id = '{$userId}'", false);
+                $user = $query->table('users')
+                    ->select('user_id', 'user_profile')
+                    ->where('user_id', '=', $userId)
+                    ->get(false);
 
                 if (!empty($user['user_profile'])) {
                     unlink(__DIR__ . "../../upload/image/{$user['user_profile']}");
