@@ -137,6 +137,13 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
         return json($response, ['message' => 'token not found'], 500);
     });
 
+    $group->put('/updateUser/{id}', function (Request $request, Response $response, array $args): Response {
+
+        $bodys = array($request->getQueryParams(), $args, $_FILES, $_REQUEST);
+
+        return json($response, ['data' => $bodys, 'status' => true]);
+    });
+
     $group->delete('/deleteUser/{id}', function (Request $request, Response $response, array $args): Response {
         global $query;
         $param = $request->getQueryParams();
