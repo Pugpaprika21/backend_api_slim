@@ -16,6 +16,10 @@ $app->addRoutingMiddleware();
 
 $app->addErrorMiddleware(true, true, true);
 
+$app->options('/{routes:.+}', function (Request $request, Response $response, array $args): Response {
+    return $response;
+});
+
 $app->add(function (Request $request, RequestHandler $handler): Response {
     $response = $handler->handle($request);
     return $response
