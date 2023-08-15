@@ -300,25 +300,23 @@ if (!function_exists('file_uploaded')) {
      * @param array $file
      * @return string|void 
      */
-    function file_uploaded($path_upload, $file)
+    function file_uploaded(string $pathUpload, array $file)
     {
-        $path = $path_upload;
+        $path = $pathUpload;
         $imageFileType = pathinfo($file['name'], PATHINFO_EXTENSION);
         $typeFile = array_merge(['jpg', 'jpeg', 'png'], ['JPG', 'JPEG', 'PNG']);
         if (!in_array($imageFileType, $typeFile)) {
             echo_r(['extension_not_found' => $file]);
         }
-
+    
         $nameFile = explode('.', $file['name']);
-        $file_name = rend_string($nameFile[0]) . round(microtime(true) * 1000) . '.' . $imageFileType;
-
-        $file_target = $path . $file_name;
-        move_uploaded_file($file['tmp_name'], $file_target);
-        chmod($file_target, 0777);
-
-        $d = now('d');
-        //write_log($file_target,  __DIR__ . "/../../logs/process/upload_files_{$d}.txt");
-        return $file_name;
+        $fileName = rend_string($nameFile[0]) . round(microtime(true) * 1000) . '.' . $imageFileType;
+    
+        $fileTarget = "{$path}{$fileName}";
+        move_uploaded_file($file['tmp_name'], $fileTarget);
+        chmod($fileTarget, 0777);
+    
+        return $fileName;
     }
 }
 
