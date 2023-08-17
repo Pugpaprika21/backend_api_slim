@@ -31,10 +31,6 @@ $app->add(function (Request $request, RequestHandler $handler): Response {
 
 $query = new Query();
 
-$app->get('/', function (Request $request, Response $response, array $args): Response {
-    return json($response, ['message' => 'hello world!!']);
-});
-
 $app->group('/api', function (RouteCollectorProxy $group): void {
     $group->get('/users/{token}', function (Request $request, Response $response, array $args): Response {
         global $query;
