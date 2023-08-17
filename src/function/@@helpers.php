@@ -254,7 +254,7 @@ if (!function_exists('line_notify')) {
 //     function view($view_file, $view_vars = [])
 //     {
 //         $view_path = __DIR__  .  $view_file;
-        
+
 //         if (!file_exists($view_path)) {
 //             http_response_code(404);
 //             throw new Exception("view path not found. [ {$view_file} ]");
@@ -298,24 +298,27 @@ if (!function_exists('file_uploaded')) {
      *
      * @param string $path_upload
      * @param array $file
+     * @param bool $checkType
      * @return string|void 
      */
-    function file_uploaded(string $pathUpload, array $file)
+    function file_uploaded(string $pathUpload, array $file, bool $checkType = false)
     {
-        $path = $pathUpload;
         $imageFileType = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $typeFile = array_merge(['jpg', 'jpeg', 'png'], ['JPG', 'JPEG', 'PNG']);
-        if (!in_array($imageFileType, $typeFile)) {
-            echo_r(['extension_not_found' => $file]);
+
+        if ($checkType) {
+            $typeFile = array_merge(['jpg', 'jpeg', 'png'], ['JPG', 'JPEG', 'PNG']);
+            if (!in_array($imageFileType, $typeFile)) {
+                echo_r(['extension_not_found' => $file]);
+            }
         }
-    
+
         $nameFile = explode('.', $file['name']);
         $fileName = rend_string($nameFile[0]) . round(microtime(true) * 1000) . '.' . $imageFileType;
-    
-        $fileTarget = "{$path}{$fileName}";
+
+        $fileTarget = "{$pathUpload}{$fileName}";
         move_uploaded_file($file['tmp_name'], $fileTarget);
         chmod($fileTarget, 0777);
-    
+
         return $fileName;
     }
 }
