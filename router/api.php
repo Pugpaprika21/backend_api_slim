@@ -180,11 +180,6 @@ $app->group('/api', function (RouteCollectorProxy $group): void {
             return json($response, ['message' => 'token does not match', 'status' => false], 500);
         }
         return json($response, ['message' => 'token not found'], 500);
-
-
-        $bodys = array($body, $_FILES);
-
-        return json($response, ['data' => $bodys, 'status' => true]);
     });
 
     $group->delete('/deleteUser/{id}', function (Request $request, Response $response, array $args): Response {
